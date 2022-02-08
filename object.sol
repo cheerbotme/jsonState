@@ -2,6 +2,14 @@
 pragma solidity ^0.8.10
 ;
 contract objectState {
+    error NotAdmin()
+    ; error NoValue()
+    ; error NoKey()
+    ; error NoCount()
+    ; error NoList()
+    ; error CurrentValue()
+    ; error KeyValueLengthMismatch()
+    ;
     constructor() {
         AdminIndex[ 0 ].admin = tx.origin
         ;
@@ -33,7 +41,7 @@ contract objectState {
             count ++
             ;
         }
-        require( count < adminCount, "NOT_ADMIN" )
+        if ( count >= adminCount ) revert NotAdmin()
         ;
     }
     uint adminCount
@@ -53,10 +61,9 @@ contract objectState {
         , string[] calldata value
     ) external {
         uint count
-        ; require(
-            key.length == value.length
-            , "KEY_VALUE_NOT_BIJECTIVE"
-        )
+        ; if (
+            key.length != value.length
+            ) revert KeyValueLengthMismatch()
         ;
         while( count < key.length ) {
             addKeyValue(
@@ -91,29 +98,26 @@ contract objectState {
         string calldata key
         , string calldata value
     ) internal {
-        require(
+        if (
             keccak256( bytes( key ) )
-            != keccak256( bytes( "" ) )
-            , "NO_KEY"
-        )
-        ; require(
+            == keccak256( bytes( "" ) )
+            ) revert NoKey()
+        ; if (
             keccak256( bytes( value ) )
-            != keccak256( bytes( "" ) )
-            , "NO_VALUE"
-        )
+            == keccak256( bytes( "" ) )
+            ) revert NoValue()
         ; (
             uint index
             , uint version
         ) = newKeyTest( key )
         ;
         if ( version > 0 ) {
-            require(
+            if (
                 keccak256( bytes( value ) )
-                != keccak256( bytes( 
+                == keccak256( bytes( 
                     KeyValue[ key ][ version -1 ].value 
                 ) )
-                , "CURRENT_VALUE"
-            )
+                ) revert CurrentValue()
             ; KeyIndex[ index ].version += 1
             ;
         }
@@ -166,18 +170,16 @@ contract objectState {
     ) public KeyValue
     ;
     function KeyCount() public view returns ( uint ) {
-        require(
-            keyCount > 0
-            , "NO_COUNT"
-        )
+        if (
+            keyCount == 0
+            ) revert NoCount()
         ; return keyCount -1
         ;
     }
     function KeyString() public view returns ( string memory ) {
-        require(
-            bytes( keyString ).length > 0
-            , "NO_LIST"
-        )
+        if (
+            bytes( keyString ).length == 0
+            ) revert NoList()
         ; return keyString
         ;
     }
