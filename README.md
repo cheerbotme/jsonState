@@ -33,6 +33,6 @@ Pull requests welcome!
 
 [ ] separate contract specific logic from generic logic
 
-[ ] optimize gas efficiency
+[x] optimize gas efficiency
 
 [ ] create JavaScript interface!
