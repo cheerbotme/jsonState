@@ -3,6 +3,8 @@ Keep The Network JSON, with a state-focus.
 
 Object state-changer on line 254.
 
+## what
+
 ![image](https://github.com/cheerbotme/jsonState/assets/3211305/58593e03-f732-4cf5-8f2a-cd45b79a8095)
 
 E.g.:
@@ -15,6 +17,13 @@ https://sepolia-optimistic.etherscan.io/address/0x0f2c3af6b686d9a8e67b17fd3888d4
 
 ![image](https://github.com/cheerbotme/jsonState/assets/3211305/64226c91-1a5a-4e8f-b309-8d47dcfeb2cd)
 
+## index.html
+
+read and write to jsonState.
+
+## host.js
+
+localhost runtime to edit `index.html`.
 
 # object.sol (depreciated)
 Generalized object store in Solidity with versioning for state change on the blockchain. 
