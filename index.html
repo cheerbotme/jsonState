@@ -9,7 +9,8 @@
 	  <div id="address"></div>
 	  <div id="provider"></div>
 	</div>
-	<div id="json"></div> 
+	<div id="json"></div>
+	<div id="account"></div>
 	<button id="write">write</button>
 	<script>
 	  ( function config() {
@@ -218,7 +219,14 @@
 	</script>
 	<script>
 	  ( function Write() {
-		  if (
+		  async function getAccount() {
+			  _0.account = await ethereum
+				  .request( {
+					  method: 'eth_requestAccounts'
+				  } )[ 0 ]
+			  ; _0.div.innerHTML += account
+			  ;
+		  } if (
 			  typeof window.ethereum.isMetaMask
 				  !== 'undefined'
 		  ) {
@@ -228,7 +236,6 @@
 		  const _0 = new Write
 		  ; _0.button.addEventListener(
 			  'click', () => {
-				  console.log( 'clicked' )
 				  ; ethereum.request( {
 					  method: 'eth_requestAccounts'
 				  } )
@@ -237,10 +244,13 @@
 		  )
 		  ;
 		  function Write() {
+			  this.account = null
 			  ; this.button = document
 				  .getElementById(
 					  'write'
 				  )
+			  ; this.div = document
+				  .getElementById( 'account' )
 			  ;
 		  }
 	  } )()
