@@ -1,4 +1,22 @@
-# object.sol
+# jsonState.sol
+Keep The Network JSON, with a state-focus.
+
+Object state-changer on line 254.
+
+![image](https://github.com/cheerbotme/jsonState/assets/3211305/58593e03-f732-4cf5-8f2a-cd45b79a8095)
+
+E.g.:
+
+https://sepolia-optimistic.etherscan.io/address/0x0f2c3af6b686d9a8e67b17fd3888d48df57dfbd2#readContract
+
+![image](https://github.com/cheerbotme/jsonState/assets/3211305/bea04cd9-330f-4efe-a006-d06d1ad1dba2)
+
+https://sepolia-optimistic.etherscan.io/address/0x0f2c3af6b686d9a8e67b17fd3888d48df57dfbd2#writeContract
+
+![image](https://github.com/cheerbotme/jsonState/assets/3211305/64226c91-1a5a-4e8f-b309-8d47dcfeb2cd)
+
+
+# object.sol (depreciated)
 Generalized object store in Solidity with versioning for state change on the blockchain. 
 
 Develop a smart contract as minimal as possible that can store any stateful object.
@@ -23,15 +41,13 @@ https://rinkeby.etherscan.io/address/0x295c006cfecb8c8f2f6e0911b6983d2cac758b26#
 
 </p>
 
-
-
 ## to do
 
 Pull requests welcome!
 
-[ ] create minified version
+[x] create minified version
 
-[ ] separate contract specific logic from generic logic
+[x] separate contract specific logic from generic logic
 
 [x] optimize gas efficiency
 
