@@ -1,5 +1,5 @@
 # jsonState.sol
-Keep The Network JSON, with a state-focus.
+Keep the network JSON, with a state-focus.
 
 Object state-changer on line 254.
 
