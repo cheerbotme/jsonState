@@ -4,13 +4,26 @@
 	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   </head>
   <body>
-	<div id="config" style="display: none">
-	  <div id="abi"></div>
-	  <div id="address"></div>
-	  <div id="provider"></div>
+	<div id="config">
+	  <div id="abi" style="display: none"></div>
+	  contract: <div id="jsonState"></div>
 	</div>
+	<div id="address"></div>
 	<div id="json"></div>
-	<div id="account"></div>
+	<form>
+	  <label for="key">key
+		<input type="text" id="key" value='[ "string" ]'>
+	  </label>
+	  <br />
+	  <label for="key">value
+		<input type="text" id="value" value='[ "string" ]'>
+	  </label>
+	  <br />
+	  <label for="key">newKeysOnly
+		<input type="text" id="newKeysOnly" value='true'>
+	  </label>
+	</form>
+	<button id="read">read</button>
 	<button id="write">write</button>
 	<script>
 	  ( function config() {
@@ -19,14 +32,9 @@
 			  .stringify(
 				  _0.abi
 			  )
-		  ; _0.div.address.innerHTML += JSON
+		  ; _0.div.jsonState.innerHTML += JSON
 			  .stringify(
-				  _0.address
-			  )
-		  ;
-		  ; _0.div.provider.innerHTML += JSON
-			  .stringify(
-				  _0.provider
+				  _0.jsonState
 			  )
 		  ;
 		  function Config() {
@@ -159,98 +167,191 @@
 					  "type": "function"
 				  }
 			  ]
-			  ; this.address = '0x0F2c3af6B686d9a8'
-				  + 'e67b17FD3888D48df57dFBD2'
 			  ; this.div = {}
 			  ; this.div.abi = document
 				  .getElementById( 'abi' )
-			  ; this.div.address = document
-				  .getElementById( 'address' )
-			  ; this.div.provider = document
-				  .getElementById( 'provider' )
-			  ; this.provider = 'https://opt-sepol'
-				  + 'ia.g.alchemy.com/v2/J_KqEhpaA'
-				  + 'sSMeauNVhMRjZovMqTBywB9'
+			  ; this.div.jsonState = document
+				  .getElementById( 'jsonState' )
+			  ; this.jsonState = '0x0F2c3af6B686d9'
+				  + 'a8e67b17FD3888D48df57dFBD2'
 			  ;
 		  }
 	  } )()
 	</script>
 	<script>
 	  ( function read() {
+		  async function getContract() {
+			  _0.address = (
+				  await _0.ethereum
+					  .request( {
+						  method: 'eth_requestAcco'
+							  + 'unts'
+					  } )
+			  )[ 0 ]
+			  ; _0.div.address.innerHTML
+				  += '<br />address: <br />'
+				  + JSON.stringify(
+					  _0.address
+				  )
+			  ; _0.next()
+			  ;
+		  }
+		  function next() {
+			  _0.contract = new _0.web3.eth
+				  .Contract( _0.abi, _0.jsonState )
+			  ; _0.contract.methods.JSON().call()
+				  .then( ( $0 ) => {
+					  _0.json = $0
+					  ; _0.div.json.innerHTML
+						  = '<br />JSON:<pre>'
+						  + JSON.stringify(
+							  JSON.parse( _0.json )
+							  , null
+							  , 2
+						  )
+						  + '</pre>'
+				  } )
+			  ;
+		  }
 		  const _0 = new Read
-		  ; _0.contract = new _0.web3.eth
-			  .Contract( _0.abi, _0.address )
-		  ; _0.contract.methods.JSON().call()
-			  .then( ( $0 ) => {
-				  _0.div.innerHTML += JSON
-					  .stringify(
-						  JSON.parse( $0 )
-						  , null
-						  , 4
-					  )
-			  } )
+		  ; _0.button.addEventListener(
+			  'click', () => {
+				  _0.abi = JSON.parse(
+					  _0.div.abi.innerHTML
+				  )
+				  ; _0.jsonState = JSON.parse(
+					  _0.div.jsonState.innerHTML
+				  )
+				  ; _0.click ++
+				  ;
+				  if ( _0.click < 2 ) {
+					  _0.getContract()
+					  ; return
+					  ;
+				  }
+				  _0.next()
+				  ;
+			  }
+		  )
 		  ;
 		  function Read() {
-			  this.abi = JSON.parse(
-				  document.getElementById(
-					  'abi'
-				  ).innerHTML
-			  )
-			  ; this.address = JSON.parse(
-				  document.getElementById(
-						  'address'
-					  ).innerHTML
-			  )
-			  ; this.div = document
-				  .getElementById( 'json' )
-			  ; this.json = null
-			  ; this.web3 = new Web3(
-				  new Web3.providers.HttpProvider(
-					  JSON.parse(
-						  document.getElementById(
-							  'provider'
-						  ).innerHTML
-					  )
+			  this.abi = null
+			  ; this.address = null
+			  ; this.button = document
+				  .getElementById(
+					  'read'
 				  )
+			  ; this.click = 0
+			  ; this.contract = null
+			  ; this.div = {}
+			  ; this.div.abi = document
+				  .getElementById( 'abi' )
+			  ; this.div.address = document
+				  .getElementById( 'address' )
+			  ; this.div.json = document
+				  .getElementById( 'json' )
+			  ; this.div.jsonState = document
+				  .getElementById( 'jsonState' )
+			  ; this.ethereum = ethereum
+			  ; this.getContract = getContract
+			  ; this.json = null
+			  ; this.jsonState = null
+			  ; this.next = next
+			  ; this.web3 = new Web3(
+				  window.ethereum
 			  )
 			  ;
 		  }
 	  } )()
-	</script>
+	  </script>
 	<script>
 	  ( function Write() {
-		  async function getAccount() {
-			  _0.account = await ethereum
-				  .request( {
-					  method: 'eth_requestAccounts'
-				  } )[ 0 ]
-			  ; _0.div.innerHTML += account
+		  async function getContract() {
+			  _0.address = (
+				  await _0.ethereum
+					  .request( {
+						  method: 'eth_requestAcco'
+							  + 'unts'
+					  } )
+			  )[ 0 ]
+			  ; _0.next()
 			  ;
-		  } if (
-			  typeof window.ethereum.isMetaMask
-				  !== 'undefined'
-		  ) {
-			  console.log( 'MetaMask installed!' )
+		  }
+		  function next() {
+			  _0.contract = new _0.web3.eth
+				  .Contract( _0.abi, _0.jsonState )
+			  ; _0.contract.methods.KeyValue(
+				  JSON.parse( _0.input.key.value )
+				  , JSON.parse(
+					  _0.input.value.value
+				  )
+				  , _0.input.newKeysOnly.value
+					  == "false" ? false : true
+			  ).send( { from: _0.address } )
+				  .then( () => {
+					  _0.read.click()
+					  ;
+				  } )
 			  ;
 		  }
 		  const _0 = new Write
 		  ; _0.button.addEventListener(
 			  'click', () => {
-				  ; ethereum.request( {
-					  method: 'eth_requestAccounts'
-				  } )
+				  _0.abi = JSON.parse(
+					  _0.div.abi.innerHTML
+				  )
+				  ; _0.jsonState = JSON.parse(
+					  _0.div.jsonState.innerHTML
+				  )
+				  ; _0.click ++
+				  ;
+				  if ( _0.click < 2 ) {
+					  _0.getContract()
+					  ; return
+					  ;
+				  }
+				  _0.next()
 				  ;
 			  }
 		  )
 		  ;
 		  function Write() {
-			  this.account = null
+			  this.abi = null
 			  ; this.button = document
 				  .getElementById(
 					  'write'
 				  )
-			  ; this.div = document
-				  .getElementById( 'account' )
+			  ; this.click = 0
+			  ; this.contract = null
+			  ; this.div = {}
+			  ; this.div.abi = document
+				  .getElementById( 'abi' )
+			  ; this.div.jsonState = document
+				  .getElementById( 'jsonState' )
+			  ; this.ethereum = ethereum
+			  ; this.getContract = getContract
+			  ; this.input = {}
+			  ; this.input.key = document
+				  .getElementById(
+					  'key'
+				  )
+			  ; this.input.value = document
+				  .getElementById(
+					  'value'
+				  )
+			  ; this.input.newKeysOnly = document
+				  .getElementById(
+					  'newKeysOnly'
+				  )
+			  ; this.jsonState = null
+			  ; this.next = next
+			  ; this.read = document
+				  .getElementById(
+					  'read'
+				  )
+			  ; this.web3 = new Web3(
+				  window.ethereum
+			  )
 			  ;
 		  }
 	  } )()
