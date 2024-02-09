@@ -5,7 +5,9 @@ Object state-changer on line 254.
 
 ## UX
 
-Visit https://cheerbotme.github.io/jsonState/ to use it, though you won't have permissions with the default contract.
+Visit https://cheerbotme.github.io/jsonState/ to use it, though you won't have write permissions with the default contract.
+
+On https://chainid.link/?network=op-sepolia network.
 
 ![image](https://github.com/cheerbotme/jsonState/assets/3211305/8435f0eb-3527-4664-8f76-60eec2961605)
 
