@@ -3,6 +3,8 @@ Keep the network JSON, with a state-focus.
 
 Object state-changer on line 254 in jsonState.sol file.
 
+![image](https://github.com/cheerbotme/jsonState/assets/3211305/58593e03-f732-4cf5-8f2a-cd45b79a8095)
+
 ## UX
 
 Visit https://cheerbotme.github.io/jsonState/ to use it, though you won't have write permissions with the default contract.
@@ -12,8 +14,6 @@ On https://chainid.link/?network=op-sepolia network.
 ![image](https://github.com/cheerbotme/jsonState/assets/3211305/8435f0eb-3527-4664-8f76-60eec2961605)
 
 ## what
-
-![image](https://github.com/cheerbotme/jsonState/assets/3211305/58593e03-f732-4cf5-8f2a-cd45b79a8095)
 
 E.g.:
 
