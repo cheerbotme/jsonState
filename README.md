@@ -1,7 +1,7 @@
 # jsonState.sol
 Keep the network JSON, with a state-focus.
 
-Object state-changer on line 254.
+Object state-changer on line 254 in jsonState.sol file.
 
 ## UX
 
