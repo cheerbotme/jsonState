@@ -66,4 +66,4 @@ Pull requests welcome!
 
 [x] optimize gas efficiency
 
-[ ] create JavaScript interface!
+[x] create JavaScript interface!
