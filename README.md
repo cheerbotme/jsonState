@@ -41,6 +41,8 @@ As a string, it is possible.
 
 ![image](https://github.com/cheerbotme/jsonState/assets/3211305/62460948-e57c-483e-9a6a-a3241aead12a)
 
+But only the first nesting keeps an indexed state change.
+
 ![image](https://github.com/cheerbotme/jsonState/assets/3211305/8c2a521b-b6fe-4cdb-a835-c94bcb9a2185)
 
 ### NFT
