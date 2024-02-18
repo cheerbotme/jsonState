@@ -35,6 +35,20 @@ https://sepolia-optimistic.etherscan.io/address/0x0f2c3af6b686d9a8e67b17fd3888d4
 
 ![photo_2024-02-08_21-25-05](https://github.com/cheerbotme/jsonState/assets/3211305/ffda39ae-be0d-41af-b083-d663d90503ff)
 
+### nesting deeper
+
+As a string, it is possible.
+
+![image](https://github.com/cheerbotme/jsonState/assets/3211305/62460948-e57c-483e-9a6a-a3241aead12a)
+
+![image](https://github.com/cheerbotme/jsonState/assets/3211305/8c2a521b-b6fe-4cdb-a835-c94bcb9a2185)
+
+### NFT
+
+Issues with permissions, but this is what it looks like.
+
+![image](https://github.com/cheerbotme/jsonState/assets/3211305/2e2d3229-f01c-488e-963d-893e502553be)
+
 ## index.html
 
 read and write to jsonState.
