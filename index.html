@@ -1,360 +1,404 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>JSON State UX</title>
 	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  </head>
-  <body>
-	<div id="config">
-	  <div id="abi" style="display: none"></div>
-	  contract: <div id="jsonState"></div>
-	</div>
-	<div id="address"></div>
-	<div id="json"></div>
-	<form>
-	  <label for="key">key
-		<input type="text" id="key" value='[ "string" ]'>
-	  </label>
-	  <br />
-	  <label for="key">value
-		<input type="text" id="value" value='[ "string" ]'>
-	  </label>
-	  <br />
-	  <label for="key">newKeysOnly
-		<input type="text" id="newKeysOnly" value='true'>
-	  </label>
-	</form>
-	<button id="read">read</button>
-	<button id="write">write</button>
-	<script>
-	  ( function config() {
-		  _0 = new Config
-		  ; _0.div.abi.innerHTML += JSON
-			  .stringify(
-				  _0.abi
-			  )
-		  ; _0.div.jsonState.innerHTML += JSON
-			  .stringify(
-				  _0.jsonState
-			  )
-		  ;
-		  function Config() {
-			  this.abi = [
-				  {
-					  "inputs": [],
-					  "stateMutability": "nonpayable",
-					  "type": "constructor"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "KeyValueNotBijective",
-					  "type": "error"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "NewKeysOnly",
-					  "type": "error"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "NoChange",
-					  "type": "error"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "NoKey",
-					  "type": "error"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "NoValue",
-					  "type": "error"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "NotAdmin",
-					  "type": "error"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "JSON",
-					  "outputs": [
-						  {
-							  "internalType": "string",
-							  "name": "",
-							  "type": "string"
-						  }
-					  ],
-					  "stateMutability": "view",
-					  "type": "function"
-				  },
-				  {
-					  "inputs": [
-						  {
-							  "internalType": "string[]",
-							  "name": "key",
-							  "type": "string[]"
-						  },
-						  {
-							  "internalType": "string[]",
-							  "name": "value",
-							  "type": "string[]"
-						  },
-						  {
-							  "internalType": "bool",
-							  "name": "newKeysOnly",
-							  "type": "bool"
-						  }
-					  ],
-					  "name": "KeyValue",
-					  "outputs": [],
-					  "stateMutability": "nonpayable",
-					  "type": "function"
-				  },
-				  {
-					  "inputs": [
-						  {
-							  "internalType": "string",
-							  "name": "key",
-							  "type": "string"
-						  }
-					  ],
-					  "name": "LatestVersion",
-					  "outputs": [
-						  {
-							  "internalType": "uint256",
-							  "name": "",
-							  "type": "uint256"
-						  }
-					  ],
-					  "stateMutability": "view",
-					  "type": "function"
-				  },
-				  {
-					  "inputs": [],
-					  "name": "TotalKeys",
-					  "outputs": [
-						  {
-							  "internalType": "uint256",
-							  "name": "",
-							  "type": "uint256"
-						  }
-					  ],
-					  "stateMutability": "view",
-					  "type": "function"
-				  },
-				  {
-					  "inputs": [
-						  {
-							  "internalType": "string",
-							  "name": "key",
-							  "type": "string"
-						  },
-						  {
-							  "internalType": "uint256",
-							  "name": "version",
-							  "type": "uint256"
-						  }
-					  ],
-					  "name": "Value",
-					  "outputs": [
-						  {
-							  "internalType": "string",
-							  "name": "",
-							  "type": "string"
-						  }
-					  ],
-					  "stateMutability": "view",
-					  "type": "function"
-				  }
-			  ]
-			  ; this.div = {}
-			  ; this.div.abi = document
-				  .getElementById( 'abi' )
-			  ; this.div.jsonState = document
-				  .getElementById( 'jsonState' )
-			  ; this.jsonState = '0x0F2c3af6B686d9'
-				  + 'a8e67b17FD3888D48df57dFBD2'
-			  ;
-		  }
-	  } )()
+	<style>
+	  body {
+		  font-family: Arial, sans-serif;
+		  margin: 0;
+		  padding: 0;
+	  }
+	  #config, #json, form {
+		  max-width: 90%;
+		  margin: 0 auto;
+		  padding: 10px;
+	  }
+	  form label {
+		  display: block;
+		  margin-bottom: 5px;
+	  }
+	  form input[type="text"] {
+		  width: 100%;
+		  padding: 8px;
+		  margin-bottom: 10px;
+		  box-sizing: border-box;
+	  }
+	  button {
+		  display: block;
+		  width: 100%;
+		  padding: 10px;
+		  background-color: #007bff;
+		  color: #fff;
+		  border: none;
+		  cursor: pointer;
+	  }
+	  button:hover {
+		  background-color: #0056b3;
+	  }
+	  pre {
+		  white-space: pre-wrap;
+	  }
+	</style>
+</script>
+</head>
+<body>
+  <div id="config">
+	<div id="abi" style="display: none"></div>
+  </div>
+  <div id="json"></div>
+  <form>
+	<label for="key">contract
+	  <input type="text" id="contract">
+	</label>
+	<br />
+	<label for="key">key
+	  <input type="text" id="key" value='[ "string" ]'>
+	</label>
+	<br />
+	<label for="key">value
+	  <input type="text" id="value" value='[ "string" ]'>
+	</label>
+	<br />
+	<label for="key">newKeysOnly
+	  <input type="text" id="newKeysOnly" value='true'>
+	</label>
+  </form>
+  <button id="read">read</button>
+  <br />
+  <button id="write">write</button>
+  <script>
+	( function config() {
+	    _0 = new Config
+	    ; _0.div.abi.innerHTML = JSON
+			.stringify(
+				_0.abi
+			)
+	    ; _0.input.contract.value = JSON
+			.stringify(
+				_0.jsonState
+			)
+	    ;
+	    function Config() {
+			this.abi = [
+				{
+					"inputs": [],
+					"stateMutability": "nonpayable",
+					"type": "constructor"
+				},
+				{
+					"inputs": [],
+					"name": "KeyValueNotBijective",
+					"type": "error"
+				},
+				{
+					"inputs": [],
+					"name": "NewKeysOnly",
+					"type": "error"
+				},
+				{
+					"inputs": [],
+					"name": "NoChange",
+					"type": "error"
+				},
+				{
+					"inputs": [],
+					"name": "NoKey",
+					"type": "error"
+				},
+				{
+					"inputs": [],
+					"name": "NoValue",
+					"type": "error"
+				},
+				{
+					"inputs": [],
+					"name": "NotAdmin",
+					"type": "error"
+				},
+				{
+					"inputs": [],
+					"name": "JSON",
+					"outputs": [
+						{
+							"internalType": "string",
+							"name": "",
+							"type": "string"
+						}
+					],
+					"stateMutability": "view",
+					"type": "function"
+				},
+				{
+					"inputs": [
+						{
+							"internalType": "string[]",
+							"name": "key",
+							"type": "string[]"
+						},
+						{
+							"internalType": "string[]",
+							"name": "value",
+							"type": "string[]"
+						},
+						{
+							"internalType": "bool",
+							"name": "newKeysOnly",
+							"type": "bool"
+						}
+					],
+					"name": "KeyValue",
+					"outputs": [],
+					"stateMutability": "nonpayable",
+					"type": "function"
+				},
+				{
+					"inputs": [
+						{
+							"internalType": "string",
+							"name": "key",
+							"type": "string"
+						}
+					],
+					"name": "LatestVersion",
+					"outputs": [
+						{
+							"internalType": "uint256",
+							"name": "",
+							"type": "uint256"
+						}
+					],
+					"stateMutability": "view",
+					"type": "function"
+				},
+				{
+					"inputs": [],
+					"name": "TotalKeys",
+					"outputs": [
+						{
+							"internalType": "uint256",
+							"name": "",
+							"type": "uint256"
+						}
+					],
+					"stateMutability": "view",
+					"type": "function"
+				},
+				{
+					"inputs": [
+						{
+							"internalType": "string",
+							"name": "key",
+							"type": "string"
+						},
+						{
+							"internalType": "uint256",
+							"name": "version",
+							"type": "uint256"
+						}
+					],
+					"name": "Value",
+					"outputs": [
+						{
+							"internalType": "string",
+							"name": "",
+							"type": "string"
+						}
+					],
+					"stateMutability": "view",
+					"type": "function"
+				}
+			]
+			; this.div = {}
+			; this.div.abi = document
+				.getElementById( 'abi' )
+			; this.input = {}
+			; this.input.contract = document
+				.getElementById( 'contract' )
+			; this.jsonState = '0x0F2c3af6B686d9a8e67b17FD3888D48df57dFBD2'
+			;
+	    }
+	} )()
+  </script>
+  <script>
+	( function read() {
+	    async function getContract() {
+			await _0.ethereum
+				.request( {
+					method: 'eth_requestAcco'
+						+ 'unts'
+				} )
+			; _0.next()
+			;
+		}
+		function next() {
+		    _0.contract = new _0.web3.eth
+			    .Contract( _0.abi, _0.jsonState )
+			; _0.contract.methods.JSON().call()
+			    .then( ( $0 ) => {
+				    _0.json = $0.replace(
+						/"{/g
+						, "{"
+					)
+					; _0.json = _0.json.replace(
+						/}"/g
+						, "}"
+					)
+					; console.log( _0.json )
+					; _0.div.json.innerHTML
+					    = 'JSON:<pre>'
+						+ JSON.stringify(
+						    JSON.parse( _0.json )
+							, null
+							, 2
+						)
+						+ '</pre>'
+				} )
+			;
+		}
+		const _0 = new Read
+		; _0.button.addEventListener(
+		    'click', () => {
+				_0.abi = JSON.parse(
+				    _0.div.abi.innerHTML
+				)
+				; _0.jsonState = JSON.parse(
+				    _0.input.contract.value
+				)
+				; _0.click ++
+				;
+				if ( _0.click < 2 ) {
+				    _0.getContract()
+					; return
+					;
+				}
+				_0.next()
+				;
+			}
+		)
+		;
+		function Read() {
+		    this.abi = null
+			; this.button = document
+			    .getElementById(
+				    'read'
+				)
+			; this.click = 0
+			; this.contract = null
+			; this.div = {}
+			; this.div.abi = document
+			    .getElementById( 'abi' )
+			; this.div.json = document
+			    .getElementById( 'json' )
+			; this.ethereum = window.ethereum
+			; this.getContract = getContract
+			; this.input = {}
+			; this.input.contract = document
+			    .getElementById( 'contract' )
+			; this.json = null
+			; this.jsonState = null
+			; this.next = next
+			; this.web3 = new Web3(
+				window.ethereum
+			)
+			;
+		}
+	} )()
 	</script>
-	<script>
-	  ( function read() {
-		  async function getContract() {
-			  _0.address = (
-				  await _0.ethereum
-					  .request( {
-						  method: 'eth_requestAcco'
-							  + 'unts'
-					  } )
-			  )[ 0 ]
-			  ; _0.div.address.innerHTML
-				  += '<br />address: <br />'
-				  + JSON.stringify(
-					  _0.address
-				  )
-			  ; _0.next()
-			  ;
-		  }
-		  function next() {
-			  _0.contract = new _0.web3.eth
-				  .Contract( _0.abi, _0.jsonState )
-			  ; _0.contract.methods.JSON().call()
-				  .then( ( $0 ) => {
-					  _0.json = $0
-					  ; _0.div.json.innerHTML
-						  = '<br />JSON:<pre>'
-						  + JSON.stringify(
-							  JSON.parse( _0.json )
-							  , null
-							  , 2
-						  )
-						  + '</pre>'
-				  } )
-			  ;
-		  }
-		  const _0 = new Read
-		  ; _0.button.addEventListener(
-			  'click', () => {
-				  _0.abi = JSON.parse(
-					  _0.div.abi.innerHTML
-				  )
-				  ; _0.jsonState = JSON.parse(
-					  _0.div.jsonState.innerHTML
-				  )
-				  ; _0.click ++
-				  ;
-				  if ( _0.click < 2 ) {
-					  _0.getContract()
-					  ; return
-					  ;
-				  }
-				  _0.next()
-				  ;
-			  }
-		  )
-		  ;
-		  function Read() {
-			  this.abi = null
-			  ; this.address = null
-			  ; this.button = document
-				  .getElementById(
-					  'read'
-				  )
-			  ; this.click = 0
-			  ; this.contract = null
-			  ; this.div = {}
-			  ; this.div.abi = document
-				  .getElementById( 'abi' )
-			  ; this.div.address = document
-				  .getElementById( 'address' )
-			  ; this.div.json = document
-				  .getElementById( 'json' )
-			  ; this.div.jsonState = document
-				  .getElementById( 'jsonState' )
-			  ; this.ethereum = ethereum
-			  ; this.getContract = getContract
-			  ; this.json = null
-			  ; this.jsonState = null
-			  ; this.next = next
-			  ; this.web3 = new Web3(
-				  window.ethereum
-			  )
-			  ;
-		  }
-	  } )()
-	  </script>
-	<script>
-	  ( function Write() {
-		  async function getContract() {
-			  _0.address = (
-				  await _0.ethereum
-					  .request( {
-						  method: 'eth_requestAcco'
-							  + 'unts'
-					  } )
-			  )[ 0 ]
-			  ; _0.next()
-			  ;
-		  }
-		  function next() {
-			  _0.contract = new _0.web3.eth
-				  .Contract( _0.abi, _0.jsonState )
-			  ; _0.contract.methods.KeyValue(
-				  JSON.parse( _0.input.key.value )
-				  , JSON.parse(
-					  _0.input.value.value
-				  )
-				  , _0.input.newKeysOnly.value
-					  == "false" ? false : true
-			  ).send( { from: _0.address } )
-				  .then( () => {
-					  _0.read.click()
-					  ;
-				  } )
-			  ;
-		  }
-		  const _0 = new Write
-		  ; _0.button.addEventListener(
-			  'click', () => {
-				  _0.abi = JSON.parse(
-					  _0.div.abi.innerHTML
-				  )
-				  ; _0.jsonState = JSON.parse(
-					  _0.div.jsonState.innerHTML
-				  )
-				  ; _0.click ++
-				  ;
-				  if ( _0.click < 2 ) {
-					  _0.getContract()
-					  ; return
-					  ;
-				  }
-				  _0.next()
-				  ;
-			  }
-		  )
-		  ;
-		  function Write() {
-			  this.abi = null
-			  ; this.button = document
-				  .getElementById(
-					  'write'
-				  )
-			  ; this.click = 0
-			  ; this.contract = null
-			  ; this.div = {}
-			  ; this.div.abi = document
-				  .getElementById( 'abi' )
-			  ; this.div.jsonState = document
-				  .getElementById( 'jsonState' )
-			  ; this.ethereum = ethereum
-			  ; this.getContract = getContract
-			  ; this.input = {}
-			  ; this.input.key = document
-				  .getElementById(
-					  'key'
-				  )
-			  ; this.input.value = document
-				  .getElementById(
-					  'value'
-				  )
-			  ; this.input.newKeysOnly = document
-				  .getElementById(
-					  'newKeysOnly'
-				  )
-			  ; this.jsonState = null
-			  ; this.next = next
-			  ; this.read = document
-				  .getElementById(
-					  'read'
-				  )
-			  ; this.web3 = new Web3(
-				  window.ethereum
-			  )
-			  ;
-		  }
-	  } )()
-	</script>
-  </body>
+  <script>
+	( function Write() {
+	    async function getContract() {
+			_0.address = (
+				await _0.ethereum
+					.request( {
+						method: 'eth_requestAcco'
+							+ 'unts'
+					} )
+			)[ 0 ]
+			; _0.next()
+			;
+	    }
+	    function next() {
+			_0.contract = new _0.web3.eth
+				.Contract( _0.abi, _0.jsonState )
+			; _0.contract.methods.KeyValue(
+				JSON.parse( _0.input.key.value )
+				, JSON.parse(
+					_0.input.value.value
+				)
+				, _0.input.newKeysOnly.value
+					== "false" ? false : true
+			).send( { from: _0.address } )
+				.then( () => {
+					_0.read.click()
+					;
+				} )
+			;
+	    }
+	    const _0 = new Write
+	    ; _0.button.addEventListener(
+			'click', () => {
+				_0.abi = JSON.parse(
+					_0.div.abi.innerHTML
+				)
+				; _0.jsonState = JSON.parse(
+					_0.input.contract.value
+				)
+				; _0.click ++
+				;
+				if ( _0.click < 2 ) {
+					_0.getContract()
+					; return
+					;
+				}
+				_0.next()
+				;
+			}
+	    )
+	    ;
+	    function Write() {
+			this.abi = null
+			; this.address = null
+			; this.button = document
+				.getElementById(
+					'write'
+				)
+			; this.click = 0
+			; this.contract = null
+			; this.div = {}
+			; this.div.abi = document
+				.getElementById( 'abi' )
+			; this.ethereum = window.ethereum
+			; this.getContract = getContract
+			; this.input = {}
+			; this.input.contract = document
+				.getElementById( 'contract' )
+			; this.input.key = document
+				.getElementById(
+					'key'
+				)
+			; this.input.value = document
+				.getElementById(
+					'value'
+				)
+			; this.input.newKeysOnly = document
+				.getElementById(
+					'newKeysOnly'
+				)
+			; this.jsonState = null
+			; this.next = next
+			; this.read = document
+				.getElementById(
+					'read'
+				)
+			; this.web3 = new Web3(
+				window.ethereum
+			)
+			;
+	    }
+	} )()
+  </script>
+</body>
 </html>
